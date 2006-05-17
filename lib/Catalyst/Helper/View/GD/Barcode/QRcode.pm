@@ -2,6 +2,8 @@ package Catalyst::Helper::View::GD::Barcode::QRcode;
 
 use strict;
 
+our $VERSION = '0.03';
+
 =head1 NAME
 
 Catalyst::Helper::View::GD::Barcode::QRcode - Helper for GD::Barcode::QRcode Views
