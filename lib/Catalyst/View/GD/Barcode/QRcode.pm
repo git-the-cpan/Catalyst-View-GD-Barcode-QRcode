@@ -3,11 +3,13 @@ package Catalyst::View::GD::Barcode::QRcode;
 use strict;
 use warnings;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 use base qw(Catalyst::View);
 use NEXT;
 use Catalyst::Exception;
+
+use GD::Barcode::QRcode;
 
 __PACKAGE__->mk_accessors(qw( ecc version module_size img_type ));
 
@@ -82,36 +84,61 @@ Or using YAML config file
         module_size: 1
         img_type: 'png'
 
-Forward to the View
+Add qrcode action to forward to the View on MyApp::Controller::Root
 
-    sub default : Private {
+    sub qrcode : Local {
         my ( $self, $c ) = @_;
-        $c->stash( qrcode => 'http://www.cpan.org' );
-        $c->forward( $c->view( 'View::QRcode' ) );
+        $c->stash->{qrcode} = 'http://www.cpan.org';
+        $c->forward( $c->view( 'QRcode' ) );
     }
 
 Or change configuration dynamically
 
-    sub dufault : Private {
+    sub qrcode : Local {
         my ( $self, $c ) = @_;
-        $c->stash( qrcode => 'http://www.cpan.org' );     
-        $c->stash( qrcode_conf => {
-            ecc         => 'Q',
-            version     => 5,
-            module_size => 3,
-            img_type    => 'gif',
-        };
-        $c->forward( $c->view( 'View::QRcode' ) );
+        $c->stash( 
+            qrcode => 'http://www.cpan.org', 
+            qrcode_conf => {
+                ecc         => 'Q',
+                version     => 5,
+                module_size => 3,
+                img_type    => 'gif',
+            },
+        );
+
+        $c->forward( $c->view( 'QRcode' ) );
     }
 
 If you use 'Catalyst::Plugin::DefaultEnd', in your application class
 
+    sub qrcode : Local {
+        my ( $self, $c) = @_;
+
+        $c->stash->{qrcode} = 'http://www.cpan.org';
+    }
+
     sub end : Private {
         my ( $self, $c ) = @_;
-        $c->forward( $c->view( 'View::QRCode' ) ) if $c->stash->{qrcode};
+        $c->forward( $c->view( 'QRCode' ) ) if $c->stash->{qrcode};
         $self->NEXT::end( $c );
     }
 
+Or with 'Catalyst::Action::RenderView'
+
+    sub render : ActionClass('RenderView') {}
+
+    sub end : Private {
+        my ( $self, $c ) = @_;
+        
+        $c->detach( $c->view( 'QRCode' ) ) if $c->stash->{qrcode};
+        $c->forward('render');
+    }
+
+Then you can get QRcode image from http://localhost:3000/qrcode
+
+For Template::Toolkit
+
+    <img src="[%c.uri_for('/qrcode') %]"/>
 
 =head1 DESCRIPTION
 

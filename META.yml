@@ -1,13 +1,16 @@
-# http://module-build.sourceforge.net/META-spec.html
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         Catalyst-View-GD-Barcode-QRcode
-version:      0.03
-version_from: lib/Catalyst/View/GD/Barcode/QRcode.pm
-installdirs:  site
-requires:
+--- #YAML:1.0
+name:                Catalyst-View-GD-Barcode-QRcode
+version:             0.04
+abstract:            Module abstract (<= 44 characters) goes here
+license:             ~
+generated_by:        ExtUtils::MakeMaker version 6.31
+distribution_type:   module
+requires:     
     Catalyst:                      5.5
     GD::Barcode::QRcode:           0.01
     Test::Simple:                  0.44
-
-distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.30
+meta-spec:
+    url:     http://module-build.sourceforge.net/META-spec-v1.2.html
+    version: 1.2
+author:
+    - Hideo Kimura (hide@hide-k.net)
