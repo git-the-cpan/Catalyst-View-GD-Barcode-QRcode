@@ -23,6 +23,7 @@ requires:
   Filter::Util::Call: 0
   GD::Barcode::QRcode: 0.01
   MRO::Compat: 0
+  perl: 5.8.1
 resources:
   license: http://dev.perl.org/licenses/
 version: 0.05
